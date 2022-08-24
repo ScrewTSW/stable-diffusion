@@ -1,16 +1,14 @@
-# Update: Added support for specifying image seed
+# Update v0.5: Added gradio interface
 
-- The code will now give the seed number along with each generated image. To generate the same image again, just specify the seed using `--seed` argument. Also, images will be saved with its seed number as its name.
-
-- eg. If the seed number for an image is `1234` and it's the 55th image in the folder, the image name will be named `seed_1234_00055.png`
-
-- If generating multiple images at once, the seed value will be incremented by 1 after each image generation. Also. if no seed is given as an argument, a random initial seed will be choosen.
+- You can now use gradio interface for img2img & txt2img instead of the CLI.
+- Activate the conda env and install the latest version of gradio using `pip install gradio` .
+- Run img2img using `python optimizedSD/img2img_gradio` and txt2img using `python optimizedSD/img2img_gradio`.
 
 # Optimized Stable Diffusion (Sort of)
 
 - This repo is a modified version of the Stable Diffusion repo, optimized to use lesser VRAM than the original by sacrificing on inference speed.
 
-- It has two python files. 1) `optimized_img2img.py` to generate new image based on a given image and prompt. 2) `optimized_txt2img.py` to generate an image based only on a prompt.
+- It has four python files. `optimized_img2img.py` & `img2img_gradio.py` to generate new image based on a given image and prompt. `optimized_txt2img.py` & `txt2img_gradio.py` to generate an image based only on a prompt.
 
 ## img2img
 
@@ -36,9 +34,7 @@
 
 - The code will give the seed number along with each generated image. To generate the same image again, just specify the seed using `--seed` argument. Also, images will be saved with its seed number as its name.
 
-- eg. If the seed number for an image is `1234` and it's the 55th image in the folder, the image name will be named `seed_1234_00055.png`
-
-- If generating multiple images at once, the seed value will be incremented by 1 after each image generation. Also. if no seed is given as an argument, a random initial seed will be choosen.
+- eg. If the seed number for an image is `1234` and it's the 55th image in the folder, the image name will be named `seed_1234_00055.png`. If no seed is given as an argument, a random initial seed will be choosen.
 
 - To get the lowest inference time per image, use the maximum batch size `--n_samples` that can fit on the GPU. Inference time per image will reduce on increasing the batch size, but the required VRAM will also increase.
 
@@ -46,9 +42,11 @@
 
 - Mixed Precision is enabled by default. If you don't have a GPU with tensor cores, you can still use mixed precision to run the code using lesser VRAM but the inference time may be larger. And if you feel that the inference is slower, try using the `--precision full` argument to disable it.
 
-- All the modified files are in the [optimizedSD](optimizedSD) folder, so if you have already cloned the original repo, you can just download and copy this folder into the orignal repo instead of cloning the entire repo.
+- You can also use gradio interface for img2img & txt2img instead of the CLI. Just activate the conda env and install the latest version of gradio using `pip install gradio` .
 
-- You can also clone this repo and follow the same installation steps as the original written below (mainly creating the conda env and placing the weights at the specified location).
+- Run img2img using `python optimizedSD/img2img_gradio` and txt2img using `python optimizedSD/img2img_gradio`.
+
+- All the modified files are in the [optimizedSD](optimizedSD) folder, so if you have already cloned the original repo, you can just download and copy this folder into the orignal repo instead of cloning the entire repo. You can also clone this repo and follow the same installation steps as the original repo(mainly creating the conda env and placing the weights at the specified location).
 
 ---
 
@@ -56,7 +54,13 @@
 
 - The only drawback is higher inference time which is still an order of magnitude faster than inference on CPU.
 
-# Stable Diffusion
+## Changelog
+
+- v0.5: Added support for using gradio interface.
+- v0.4: Added support for specifying image seed.
+- v0.3: Added support for using mixed precision.
+- v0.2: Added support for generating images in batches.
+- v0.1: Split the model into multiple parts to run it on lower VRAM.
 
 _Stable Diffusion was made possible thanks to a collaboration with [Stability AI](https://stability.ai/) and [Runway](https://runwayml.com/) and builds upon our previous work:_
 

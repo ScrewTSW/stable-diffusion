@@ -150,7 +150,7 @@ class SpatialSelfAttention(nn.Module):
 
 
 class CrossAttention(nn.Module):
-    def __init__(self, query_dim, context_dim=None, heads=8, dim_head=64, dropout=0., att_step=4):
+    def __init__(self, query_dim, context_dim=None, heads=8, dim_head=64, dropout=0., att_step=1):
         super().__init__()
         inner_dim = dim_head * heads
         context_dim = default(context_dim, query_dim)
@@ -178,8 +178,6 @@ class CrossAttention(nn.Module):
         del context, x
         q, k, v = map(lambda t: rearrange(t, 'b n (h d) -> (b h) n d', h=h), (q, k, v))
 
-        sim = einsum('b i d, b j d -> b i j', q, k) * self.scale  # (8, 4096, 40)
-        del q, k
 
         if exists(mask):
             mask = rearrange(mask, 'b ... -> b (...)')
@@ -187,12 +185,6 @@ class CrossAttention(nn.Module):
             mask = repeat(mask, 'b j -> (b h) () j', h=h)
             sim.masked_fill_(~mask, max_neg_value)
             del mask
-
-        # attention, what we cannot get enough of, by halves
-        att_step = self.att_step
-        limit = sim.shape[0]
-        for i in range (0, limit, att_step):
-            sim[i:i+att_step] = sim[i:i+att_step].softmax(dim=-1)
 
 
         sim = einsum('b i j, b j d -> b i d', sim, v)
